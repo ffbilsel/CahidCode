@@ -2,6 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let questionContainer = document.getElementsByClassName("question")[0];
   questionContainer.innerHTML = localStorage.getItem("question");
 
+  let prompt = JSON.parse(localStorage.getItem("prompt"));
+  document.getElementsByClassName("code-input")[0].textContent = prompt.input;
+  document.getElementsByClassName("code-expected")[0].textContent =
+    prompt.expected;
+
   document
     .getElementsByClassName("submit-button")[0]
     .addEventListener("click", () => {

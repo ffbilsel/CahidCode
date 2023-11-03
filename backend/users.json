@@ -1,0 +1,13 @@
+{
+  "furkan": {
+    "password": "12345",
+    "solved": [
+      [1, 2],
+      [1, 2, 3]
+    ]
+  },
+  "ahmet": {
+    "password": "123",
+    "solved": [[1], [1]]
+  }
+}

@@ -1,18 +1,24 @@
 let json = document.addEventListener("DOMContentLoaded", () => {
-  fetch("../scripts/weeks.json")
+  fetch("http://localhost:8080/weeks", {
+    method: "POST",
+    body: JSON.stringify({
+      token: JSON.parse(localStorage.getItem("token")),
+      username: JSON.parse(localStorage.getItem("username")),
+    }),
+  })
     .then((res) => res.json())
     .then((weeks) => {
       weeks.forEach((week, index) => {
         let weekDiv = document.createElement("div");
         weekDiv.className = "week-div";
         weekDiv.onclick = () => {
-          fetch(
-            "../scripts/week1.json"
-            // {
-            //   method: "POST",
-            //   body: JSON.stringify(localStorage.getItem("login-info")),
-            // }
-          )
+          fetch("http://localhost:8080/weeks/" + (parseInt(index) + 1), {
+            method: "POST",
+            body: JSON.stringify({
+              token: JSON.parse(localStorage.getItem("token")),
+              username: JSON.parse(localStorage.getItem("username")),
+            }),
+          })
             .then((res) => res.json())
             .then((json) => {
               localStorage.setItem("questions", JSON.stringify(json));

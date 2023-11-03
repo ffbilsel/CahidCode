@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
     tempDiv.className = "question";
     tempDiv.onclick = () => {
       localStorage.setItem("question", question.html);
+      localStorage.setItem(
+        "prompt",
+        JSON.stringify({ input: question.input, expected: question.expected })
+      );
       window.location.replace("./question.html");
     };
     questionContainer.appendChild(tempDiv);

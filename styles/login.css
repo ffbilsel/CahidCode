@@ -20,3 +20,9 @@ h1 {
   margin: 1rem 0 0 0;
   padding: 0;
 }
+
+.fail {
+  display: none;
+  color: red;
+  font-weight: bold;
+}
