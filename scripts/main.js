@@ -2,9 +2,12 @@ let json = document.addEventListener("DOMContentLoaded", () => {
   fetch("http://localhost:8080/weeks", {
     method: "POST",
     body: JSON.stringify({
-      token: JSON.parse(localStorage.getItem("token")),
-      username: JSON.parse(localStorage.getItem("username")),
+      token: localStorage.getItem("token"),
+      username: localStorage.getItem("user"),
     }),
+    headers: {
+      "Content-Type": "application/json",
+    },
   })
     .then((res) => res.json())
     .then((weeks) => {
@@ -15,12 +18,16 @@ let json = document.addEventListener("DOMContentLoaded", () => {
           fetch("http://localhost:8080/weeks/" + (parseInt(index) + 1), {
             method: "POST",
             body: JSON.stringify({
-              token: JSON.parse(localStorage.getItem("token")),
-              username: JSON.parse(localStorage.getItem("username")),
+              token: localStorage.getItem("token"),
+              username: localStorage.getItem("user"),
             }),
+            headers: {
+              "Content-Type": "application/json",
+            },
           })
             .then((res) => res.json())
             .then((json) => {
+              console.log(json);
               localStorage.setItem("questions", JSON.stringify(json));
               localStorage.setItem("week", JSON.stringify(parseInt(index + 1)));
               window.location.replace("./week.html");
