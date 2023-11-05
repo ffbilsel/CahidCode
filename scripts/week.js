@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let questions = JSON.parse(localStorage.getItem("questions"));
   let questionContainer = document.getElementsByClassName("inner-container")[0];
 
-  questions.forEach((question) => {
+  questions.forEach((question, index) => {
     let tempDiv = document.createElement("div");
     tempDiv.innerHTML = question.html;
     tempDiv.style.border =
@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
       : "white";
     tempDiv.className = "question";
     tempDiv.onclick = () => {
+      localStorage.setItem("question-info", {
+        question: index,
+        week: localStorage.getItem("week"),
+      });
       localStorage.setItem("question", question.html);
       localStorage.setItem(
         "prompt",

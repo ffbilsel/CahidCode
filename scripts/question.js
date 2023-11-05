@@ -7,24 +7,36 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementsByClassName("code-expected")[0].textContent =
     prompt.expected;
 
+  let questionInfo = JSON.parse(localStorage.getItem("question-info"));
   document
     .getElementsByClassName("submit-button")[0]
     .addEventListener("click", () => {
       fetch(
-        "../scripts/question1_b.json"
-        // {
-        //   method: "POST",
-        //   body: JSON.stringify(document.getElementsByTagName("textarea")[0].value),
-        // }
+        "http://localhost:8080/solve/" +
+          (parseInt(questionInfo.week) - 1).toString() +
+          "/" +
+          questionInfo.question,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            solution: document.getElementsByTagName("textarea")[0].value,
+            token: localStorage.getItem("token"),
+            username: localStorage.getItem("user"),
+          }),
+        }
       )
         .then((res) => res.json())
         .then((json) => {
-          document.getElementsByClassName("code-input")[0].textContent =
-            json.input;
-          document.getElementsByClassName("code-output")[0].textContent =
-            json.output;
-          document.getElementsByClassName("code-expected")[0].textContent =
-            json.expected;
+          if (json.success) {
+            window.location.replace("./week.html");
+          } else {
+            document.getElementsByClassName("code-input")[0].textContent =
+              json.input;
+            document.getElementsByClassName("code-output")[0].textContent =
+              json.output;
+            document.getElementsByClassName("code-expected")[0].textContent =
+              json.expected;
+          }
         });
     });
 });

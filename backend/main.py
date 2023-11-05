@@ -42,6 +42,11 @@ class ValidationInfo(BaseModel):
     username: str
     token: str
 
+class Solution(BaseModel):
+    Solution: str
+    username: str
+    token: str
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -60,7 +65,7 @@ def login(user: User):
         token = str(uuid4())
         users[user.username]["token"] = token
         return token
-    return false
+    return "Bad Request"
 
 @app.post("/weeks/")
 def getWeeks(validation: ValidationInfo):
@@ -70,17 +75,36 @@ def getWeeks(validation: ValidationInfo):
         for i in range(len(user["solved"])):
             res.append({"completed": len(user["solved"][i]), "nofQuestions": weeks[i]["questionTotal"]})
         return res
-    return ""
+    return "Invalid Credentials"
 
 @app.post("/weeks/{week_number}")
 def getWeek(week_number, validation: ValidationInfo):
+    week_number_int = int(week_number)
+    if len(weeks) <= week_number_int or week_number_int < 0:
+        return "Bad Request"
     user = users[validation.username]
-    week_number_int = int(week_number) - 1
-    if user is not None and user["token"] == validation.token and len(weeks) > week_number_int and week_number_int >= 0:
+    if user is not None and user["token"] == validation.token:
         res = []
         for i in range(len(weeks[week_number_int]) - 1):
             res.append({"html": weeks[week_number_int][i]["question"], "input": weeks[week_number_int][i]["input"],
              "type": weeks[week_number_int][i]["type"], "solved": (i + 1) in user["solved"][week_number_int], 
              "expected": weeks[week_number_int][i]["expected"] })
         return res
-    return ""
+    return "Invalid Credentials"
+
+@app.post("/solve/{week_number}/{question_number}")
+def solve(week_number, question_number, solution: Solution):
+    week_number_int = int(week_number) 
+    question_number_int = int(question_number)
+    if week_number_int < 0 or week_number_int >= len(weeks) or \
+        question_number_int < 0 or question_number_int >= len(weeks[week_number_int]):
+        return "Bad Request"
+    user = users[solution.username]
+    if user is not None and user["token"] == solution.token:
+        return run(solution["solution"], weeks[week_number_int][question_number_int]["expected"])
+    return "Invalid Credentials"
+
+def run(solution, expected):
+    # bu judge mevzusu cok kolay degil usendim.
+    # {success: true} || {success: false, input: "1 2 4", output: "123", expected: "7"}
+    pass

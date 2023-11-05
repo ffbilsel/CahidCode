@@ -15,7 +15,7 @@ let json = document.addEventListener("DOMContentLoaded", () => {
         let weekDiv = document.createElement("div");
         weekDiv.className = "week-div";
         weekDiv.onclick = () => {
-          fetch("http://localhost:8080/weeks/" + (parseInt(index) + 1), {
+          fetch("http://localhost:8080/weeks/" + index, {
             method: "POST",
             body: JSON.stringify({
               token: localStorage.getItem("token"),
